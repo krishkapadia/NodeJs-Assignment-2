@@ -1,11 +1,13 @@
-// 6) Login, CRUD operations for students table with mongodb, express and any one template engine, Logout.
+// Login, CRUD operations for students table with mongodb, express and frontend(html, css, javascript / jquery / angularjs), Logout.
 
 // Username : admin
 // Password : admin
 
+const { urlencoded } = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+//var router = express.Router();
 const port = 8080;
 
 // MongoDb Connection
@@ -27,40 +29,32 @@ const tblLoginSchema = new mongoose.Schema({
 // Referencing Schema
 const tblLogin = mongoose.model('tblLogin', tblLoginSchema);
 
-// Inserting Demo record for login
-// var tmp = new tblLogin({
-//     username : "admin",
-//     password:"admin"
-// });
-
-// tmp.save((err,data)=>{
-//     console.log("Insert Successfull");
-// })
-
-// Set View Engine
-app.set("view engine", "ejs");
-
-// Url Encoder
 app.use(express.urlencoded({ extended: true }));
+//router.use(express.static(__dirname + '/public'));
 
-// Get Method
-app.get("/", (req, res) => {
-    res.render("login", { success: null, color: null});
+app.get("/",(req,res)=>{
+    res.sendFile(__dirname + "/views/index.html",{name : "Krishna"});
 });
 
 app.post("/", (req, res) => {
-    var msg = null;
     var username = req.body.username;
-    var password = req.body.password;
+    var password = req.body.password;   
     tblLogin.findOne({ username: username, password: password }, (err, data) => {
         if (data == null)
-            res.render("login", { success: "Invalid Username or Password" , color : "Red"});
+        {
+            //res.render("login", { success: "Invalid Username or Password", color: "Red" });
+            res.sendFile(__dirname + "/views/index2.html");
+        }            
         else
-            res.render("login", { success: "Successfull Login", color: "Green"});
-    })
+        {
+            //res.render("login", { success: "Successfull Login", color: "Green" });
+            res.sendFile(__dirname + "/views/index3.html");
+        }
+        console.log(data);
+    }) 
     
-})
+});
 
-app.listen(port, () => {
-    console.log("Server is running on port number : ", port);
-})
+app.listen(port,()=>{
+    console.log("Server is running on port number : ",port);
+});
