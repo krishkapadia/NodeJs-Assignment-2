@@ -4,10 +4,10 @@ const fs = require('fs');
 const port = 8080;
 
 router.use(express.static(__dirname + '/public'));
-app.set('views', __dirname + '/views');
+
 
 app.get('/', (req, res) => {
-    res.render("videostreming");
+    res.sendFile(__dirname + "/views/videostreming.html");
 });
 
 app.get('/video', (req, res) => {
@@ -36,5 +36,7 @@ app.get('/video', (req, res) => {
     videoStream.pipe(res);
 });
 
-app.listen(port);
+app.listen(port, () => {
+    console.log("Server is running on port number : ", port);
+});
 
