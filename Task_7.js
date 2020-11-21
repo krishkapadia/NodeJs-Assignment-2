@@ -26,11 +26,21 @@ const tblLoginSchema = new mongoose.Schema({
     password: String
 });
 
+const tblStudentSchema = new mongoose.Schema({
+    name: String,
+    surname: String,
+    email: String,
+    city: String
+})
+
 // Referencing Schema
 const tblLogin = mongoose.model('tblLogin', tblLoginSchema);
+const tblStudent = mongoose.model('tblStudent', tblStudentSchema);
 
 app.use(express.urlencoded({ extended: true }));
 //router.use(express.static(__dirname + '/public'));
+
+app.set("view engine", "ejs");
 
 app.get("/",(req,res)=>{
     res.sendFile(__dirname + "/views/index.html",{name : "Krishna"});
@@ -48,12 +58,76 @@ app.post("/", (req, res) => {
         else
         {
             //res.render("login", { success: "Successfull Login", color: "Green" });
-            res.sendFile(__dirname + "/views/index3.html");
+            res.redirect("/studentdata");
+            //res.sendFile(__dirname + "/views/index3.html");
         }
         console.log(data);
     }) 
     
 });
+
+app.post("/student", (req, res) => {
+    var msg = null;
+    var name = req.body.name;
+    var surname = req.body.surname;
+    var email = req.body.email;
+    var city = req.body.city;
+    var demoObj = new tblStudent({
+        name: name,
+        surname: surname,
+        email: email,
+        city: city
+    });
+    demoObj.save((err, data) => {
+        console.log(data);
+    })
+    res.redirect("/studentdata");
+});
+
+app.get("/student", (req, res) => {
+    tblStudent.find((err, data) => {
+        //res.render("student", { data: data });
+        res.send(JSON.stringify(data));
+        //res.sendFile(__dirname + "/views/index3.html",{data:"Hello"});
+    });
+})
+
+app.get("/studentdata", (req, res) => {
+    tblStudent.find((err, data) => {
+        res.sendFile(__dirname + "/views/index3.html", { data: "Hello" });
+    });
+})
+
+app.post("/delete", (req, res) => {
+    var id = req.query.id;
+    var del = tblStudent.findByIdAndDelete(id)
+    del.exec((err, data) => {
+        res.redirect("/studentdata");
+    })
+
+});
+
+app.post("/updateData", (req, res) => {
+    var id = req.query.id;
+    tblStudent.find({ _id: id }, (err, data1) => {
+        if (!err) {
+            tblStudent.find((err, data) => {
+                if (!err) {
+                    res.render("updateView.ejs", { data: data, params: data1 });
+                }
+            })
+        }
+    });
+});
+
+app.post("/update", (req, res) => {
+    var id = req.query.id;
+    tblStudent.findOneAndUpdate({ _id: id }, { name: req.body.name, surname: req.body.surname, city: req.body.city, email: req.body.email }, (err, data1) => {
+        if (!err) {
+            res.redirect("/studentdata");
+        }
+    });
+})
 
 app.listen(port,()=>{
     console.log("Server is running on port number : ",port);

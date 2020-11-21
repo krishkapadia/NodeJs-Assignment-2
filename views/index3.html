@@ -4,20 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Students</title>
 </head>
-
-<body>
-    <center>
-        <h1>Login Successfull </h1>
-
-        <form action="/" method="GET">
-            <button type="submit" >Logout</button>
-        </form>
-
-    </center>
-
-
 </body>
+<center>
+<h1>Add Student Details</h1>
+<form action="/student" method="POST">
+    <table>
+        <tr>
+            <td>Enter Name : </td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>Enter Surname : </td>
+            <td><input type="text" name="surname"></td>
+        </tr>
+        <tr>
+            <td>Enter Email : </td>
+            <td><input type="text" name="email"></td>
+        </tr>
+        <tr>
+            <td>Enter City : </td>
+            <td><input type="text" name="city"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Add Student"></td>
+        </tr>
+    </table>
+</form>
+<table >
+    <tbody id="div1">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<script>
+    $(document).ready(() => {        
+        var table
+        $.ajax({
+            url: '/student',
+            method: 'get',
+            dataType: 'json',
+            success: function (result) {
+                console.log("Length: " + result.length)
+                console.log(result[0]._id);
+                for (let index = 0; index < result.length; index++) {
+
+                    var html = `                        
+                        <tr>
+                            <td style="text-align: center;"> ` + result[index]._id + ` </td>
+                            <td style="text-align: center;"> ` + result[index].name + ` </td>
+                            <td style="text-align: center;"> ` + result[index].surname + ` </td>
+                            <td style="text-align: center;"> ` + result[index].email + ` </td>
+                            <td style="text-align: center;"> ` + result[index].city + ` </td>
+                            <td style="text-align: center;">
+                                <form action="/delete?id=`+ result[index]._id + ` " method="post"><input type="submit" value="Delete">
+                                </form>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="/updateData?id=`+ result[index]._id + `" method="post"><input type="submit" value="Update">
+                                </form>
+                            </td>
+                        </tr>                                              
+                    `;
+                    //console.log(result);
+
+                    $("#div1").append(html);
+                }
+            },
+
+        });
+    })
+</script>
+</center>
+<body>
 
 </html>
