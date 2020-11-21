@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <center>
+        
+
+        <h1>Add Student Details</h1>
+        <form action="/student" method="POST">
+            <table>
+                <tr>
+                    <td>Enter Name : </td>
+                    <td><input type="text" name="name"></td>
+                </tr>
+                <tr>
+                    <td>Enter Surname : </td>
+                    <td><input type="text" name="surname"></td>
+                </tr>
+                <tr>
+                    <td>Enter Email : </td>
+                    <td><input type="text" name="email"></td>
+                </tr>
+                <tr>
+                    <td>Enter City : </td>
+                    <td><input type="text" name="city"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Add Student"></td>
+                </tr>
+            </table>
+        </form>
+
+        <h1>Student Details</h1>
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Surname</td>
+                <td>Email</td>
+                <td>City</td>
+                <td>Delete</td>
+                <td>Edit</td>
+            </tr>
+            <% data.forEach(function( eachPerson){ %>
+            <tr>
+                <td style="text-align: center;"> <%= eachPerson.name %> </td>
+                <td style="text-align: center;"> <%= eachPerson.surname %> </td>
+                <td style="text-align: center;"> <%= eachPerson.email %> </td>
+                <td style="text-align: center;"> <%= eachPerson.city %> </td>
+                <td style="text-align: center;">
+                    <form action="/delete?id=<%= eachPerson._id %>" method="post"><input type="submit" value="Delete">
+                    </form>
+                </td>
+                <td style="text-align: center;">
+                    <form action="/updateData?id=<%= eachPerson._id %>" method="post"><input type="submit" value="Update">
+                    </form>
+                </td>
+            </tr>
+            
+            <% }) %>
+        </table>
+        
+    </center>
+
+
+</body>
+
+</html>
