@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const port = 8080;
-
+const router = express.Router();
 router.use(express.static(__dirname + '/public'));
 
 
